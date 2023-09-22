@@ -1,0 +1,122 @@
+<form [formGroup]="form" style="overflow-x: hidden;">
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">
+      {{ form.get("primer_nombre").value || "Nuevo Usuario" }}
+    </h2>
+
+    <button
+      class="text-secondary"
+      mat-dialog-close
+      mat-icon-button
+      type="button"
+    >
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content class="flex flex-col">
+    <div class="w-full">
+      <div class="flex flex-wrap">
+        <div class="w-full">
+            <vex-custom-mat-select
+            label="Perfil"
+            icon="mat:check_box"
+            [items$]="perfiles$"
+            [required]="true"
+            formControlName="cod_perfil"
+          >
+          </vex-custom-mat-select>
+        </div>
+
+        <mat-form-field class="w-full">
+          <mat-label>Primer Nombre</mat-label>
+          <input type="text" formControlName="primer_nombre" matInput />
+          <mat-icon
+            svgIcon="mat:business"
+            matPrefix
+            class="icon mr-2"
+            fontSet="fa"
+          ></mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Segundo Nombre</mat-label>
+          <input formControlName="segundo_nombre" matInput />
+          <mat-icon
+            svgIcon="mat:business"
+            matPrefix
+            class="icon mr-2"
+            fontSet="fa"
+          ></mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Apellido Paterno</mat-label>
+          <input formControlName="apellido_paterno" matInput />
+          <mat-icon
+            svgIcon="mat:business"
+            matPrefix
+            class="icon mr-2"
+            fontSet="fa"
+          ></mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Apellido Materno</mat-label>
+          <input formControlName="apellido_materno" matInput />
+          <mat-icon
+            svgIcon="mat:business"
+            matPrefix
+            class="icon mr-2"
+            fontSet="fa"
+          ></mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Correo</mat-label>
+          <input formControlName="correo" matInput />
+          <mat-icon
+            svgIcon="mat:business"
+            matPrefix
+            class="icon mr-2"
+            fontSet="fa"
+          ></mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Contraseña</mat-label>
+            <input [type]="inputType" formControlName="contrasena" matInput required>
+            <mat-icon [fontIcon]="'fa-key'" matPrefix class="icon mr-2" fontSet="fa"></mat-icon>
+            <button (click)="togglePassword()" mat-icon-button matSuffix type="button">
+              <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
+              <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+            </button>
+          </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()" type="button">Cancelar</button>
+    <button
+      color="primary"
+      *ngIf="isEdit"
+      mat-flat-button
+      type="submit"
+      (click)="actualizar()"
+    >
+      <ng-container>Actualizar</ng-container>
+    </button>
+    <button
+      color="primary"
+      *ngIf="!isEdit"
+      mat-flat-button
+      type="submit"
+      (click)="registrar()"
+    >
+      <ng-container>Registrar</ng-container>
+    </button>
+  </mat-dialog-actions>
+</form>

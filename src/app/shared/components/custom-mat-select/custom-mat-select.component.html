@@ -1,0 +1,27 @@
+<div class="flex items-center">
+    <mat-form-field class="w-full">
+        <mat-icon class="ltr:mr-3 rtl:ml-3" matPrefix [svgIcon]="icon"></mat-icon>
+        <button matSuffix *ngIf="control.value && !required" aria-label="Clear"
+            (click)="onClick($event)">
+            <mat-icon svgIcon="mat:clear"></mat-icon>
+        </button>
+        <mat-label *ngIf="!(items$ | async); else mostrarLabel">
+            <div class="flex justify-between">
+                <span class="flex-1">Cargando ...</span>
+                <mat-spinner class="spinner" diameter="20"></mat-spinner>
+            </div>
+        </mat-label>
+        <ng-template #mostrarLabel>
+            <mat-label>
+                {{label}}
+            </mat-label>
+        </ng-template>
+        <div class="flex items-center h-full">
+            <mat-select [formControl]="control" [disabled]="disabled" [required]="required" (selectionChange)="onSelectionChange($event.value)">
+                <mat-option *ngFor="let item of items$ | async" [value]="item.id">
+                    {{item.nombre}}
+                </mat-option>
+            </mat-select>
+        </div>
+    </mat-form-field>
+</div>

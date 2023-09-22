@@ -1,0 +1,6 @@
+<button color="primary" mat-raised-button type="button" (click)="buscar()" [disabled]="isLoading">
+    <mat-icon *ngIf="!isLoading && iconButton !== ''" [svgIcon]="iconButton"></mat-icon>
+    <span *ngIf="isLoading"></span>
+    <span class="button-text" *ngIf="!isLoading">{{previousName}}</span>
+    <span class="button-text" *ngIf="isLoading" class="pl-1">{{laterName}}</span>
+</button>

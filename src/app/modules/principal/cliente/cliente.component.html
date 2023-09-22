@@ -1,0 +1,182 @@
+<vex-page-layout>
+  <vex-page-layout-header
+    class="pb-16 flex flex-col items-start justify-center"
+  >
+    <div
+      class="container w-full flex flex-col sm:flex-row justify-between"
+    >
+
+    <div class="container px-0 mt-8">
+      <mat-expansion-panel [expanded]="false" [formGroup]="form" style="z-index: 999;" class="w-full">
+
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <div class="flex">
+                    <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                    &nbsp;&nbsp;
+                    <span>Filtro Usuarios</span>
+                </div>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+    
+        <div class="flex flex-col sm:flex-row sm:flex-wrap">
+          <div class="pr-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+            <vex-custom-mat-select 
+              label="Estado" 
+              icon="mat:check_box"
+              [items$]="estados$" 
+              [required]="true"
+              formControlName="estado">
+            </vex-custom-mat-select>
+          </div>
+        
+          <div class="pr-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+            <mat-form-field class="w-full">
+                <mat-label>Nombres o apellidos</mat-label>
+                <input type="text" formControlName="termino" matInput >
+                <mat-icon class="ltr:mr-3 rtl:ml-3" matPrefix svgIcon="mat:business"></mat-icon>
+            </mat-form-field>
+          </div>
+        
+          <div class="pr-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+            <vex-custom-mat-select 
+              label="Perfil" 
+              icon="mat:check_box"
+              [items$]="perfiles$" 
+              [required]="true"
+              formControlName="perfil">
+            </vex-custom-mat-select>
+          </div>
+
+        </div>
+    
+        <div class="actions flex items-center justify-end gap-2">
+          <div class="actions">
+            <vex-loading-button (onClickEvent)="buscar($event)" [iconButton]="'mat:search'" [previousName]="'Buscar'" [laterName]="'Buscando'" [isLoading]="isLoadingButton"></vex-loading-button>
+          </div>
+        </div>
+    
+      </mat-expansion-panel>
+    </div>
+
+
+    </div>
+  </vex-page-layout-header>
+
+  <vex-page-layout-content
+    [class.container]="'boxed'"
+    [class.px-gutter]="'fullwidth'"
+    class="-mt-6"
+  >
+    <div class="card overflow-auto -mt-16">
+      <div
+        class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center"
+      >
+        <button
+          (click)="registrarUsuario()"
+          class="ml-4 flex-none"
+          color="primary"
+          mat-mini-fab
+          matTooltip="Registrar Usuario"
+          type="button"
+        >
+          <mat-icon svgIcon="mat:add"></mat-icon>
+        </button>
+      </div>
+
+      <table
+        @stagger
+        [dataSource]="dataSource"
+        class="w-full"
+        mat-table
+        matSort
+      >
+        <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Text Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container
+            *ngIf="column.type === 'text'"
+            [matColumnDef]="column.property"
+          >
+            <th
+              *matHeaderCellDef
+              class="uppercase"
+              mat-header-cell
+              mat-sort-header
+            >
+              {{ column.label }}
+            </th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              {{ row[column.property] }}
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Text Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container
+            *ngIf="column.type === 'date'"
+            [matColumnDef]="column.property"
+          >
+            <th
+              *matHeaderCellDef
+              class="uppercase"
+              mat-header-cell
+              mat-sort-header
+            >
+              {{ column.label }}
+            </th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              {{ row[column.property] | dateFormat}}
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+          <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+            <button
+              (click)="$event.stopPropagation()"
+              [matMenuTriggerData]="{ customer: row }"
+              [matMenuTriggerFor]="actionsMenu"
+              mat-icon-button
+              type="button"
+            >
+              <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+        <tr
+          *matRowDef="let row; columns: visibleColumns"
+          @fadeInUp
+          class="hover:bg-hover trans-ease-out cursor-pointer"
+          mat-row
+        ></tr>
+      </table>
+
+      <mat-paginator
+        [pageSizeOptions]="pageSizeOptions"
+        [pageSize]="pageSize"
+        class="sticky left-0"
+      ></mat-paginator>
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>
+
+<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+  <ng-template let-customer="customer" matMenuContent>
+    <button (click)="actualizarUsuario(customer)" mat-menu-item>
+      <mat-icon svgIcon="mat:edit"></mat-icon>
+      <span>Modificar</span>
+    </button>
+    <button (click)="eliminarUsuario(customer)" mat-menu-item>
+      <mat-icon svgIcon="mat:delete"></mat-icon>
+      <span>Eliminar</span>
+    </button>
+  </ng-template>
+</mat-menu>

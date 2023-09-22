@@ -1,0 +1,39 @@
+<div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
+    <div @fadeInUp class="card overflow-hidden w-full max-w-md">
+        <div class="p-6 pb-0 flex flex-col items-center justify-center">
+            <div class="fill-current text-center">
+                <img class="w-64" src="assets/img/demo/logo.png">
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <h2 class="title m-0">Bienvenido</h2>
+            <h4 class="body-2 text-secondary m-0">Por favor, ingrese sus credenciales.</h4>
+        </div>
+
+        <div [formGroup]="form" class="p-6 flex flex-col gap-4">
+            <div class="flex flex-col">
+                <mat-form-field class="flex-1">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input formControlName="usuario" matInput required>
+                    <mat-error *ngIf="form.get('usuario').hasError('required')">El campo es requerido</mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex-1">
+                    <mat-label>Contraseña</mat-label>
+                    <input [type]="inputType" formControlName="contrasena" matInput required>
+                    <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility"
+                        type="button">
+                        <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
+                        <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+                    </button>
+                    <mat-hint>Haga clic en el ojo para alternar la visibilidad</mat-hint>
+                    <mat-error *ngIf="form.get('contrasena').hasError('required')">El campo es requerido</mat-error>
+                </mat-form-field>
+            </div>
+
+            <button (click)="login()" color="primary" mat-raised-button type="button">
+                INGRESAR
+            </button>
+        </div>
+    </div>
+</div>
